@@ -5,18 +5,18 @@
  *      Author: Ross
  */
 
-#ifndef X_LSM6DSO_H_
-#define X_LSM6DSO_H_
+#ifndef G_LSM6DSO_H_
+#define G_LSM6DSO_H_
 
-#include <Accelerometer.h>
-#include <LSM6DSO_ACC_GYRO_driver_HL.h>
+#include <Gyroscope.h>
+#include <LSM6DS0_ACC_GYRO_driver_HL.h>
 
 #define IKS01A1_LSM6DS0_WHO_AM_I       (uint8_t)0x68
 
-class X_lsm6dso: public Accelerometer {
+class G_lsm6ds0: public Gyroscope {
 public:
-	X_lsm6dso(DrvContextTypeDef &);
-	~X_lsm6dso();
+	G_lsm6ds0(DrvContextTypeDef &);
+	~G_lsm6ds0();
 
 	DrvStatusTypeDef Init (DrvContextTypeDef &);
 	DrvStatusTypeDef DeInit (DrvContextTypeDef &);

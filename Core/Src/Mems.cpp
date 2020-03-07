@@ -10,6 +10,7 @@
 Mems::Mems() {
 	// TODO Auto-generated constructor stub
 
+	I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;
 }
 
 Mems::~Mems() {
@@ -43,11 +44,11 @@ DrvStatusTypeDef Mems::Sensor_IO_Init(void)
 
 	if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_READY)
 	{
-		return 0;
+		return COMPONENT_ERROR;
 	}
 	else
 	{
-		return 1;
+		return COMPONENT_OK;
 	}
 }
 
@@ -129,6 +130,46 @@ uint8_t Mems::Sensor_IO_Read(void *handle, uint8_t ReadAddr, uint8_t *pBuffer,
 }
 
 /**
+ * @brief  Configures I2C interface.
+ * @param  None
+ * @retval 0 in case of success
+ * @retval 1 in case of failure
+ */
+uint8_t Mems::I2C_EXPBD_Init(void)
+{
+  if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_RESET)
+  {
+
+    /* I2C_EXPBD peripheral configuration */
+
+#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)) || defined(STM32F401xE))
+    I2C_EXPBD_Handle.Init.ClockSpeed = NUCLEO_I2C_EXPBD_SPEED;
+    I2C_EXPBD_Handle.Init.DutyCycle = I2C_DUTYCYCLE_2;
+#endif
+
+#if (defined (USE_STM32L0XX_NUCLEO) || defined (USE_STM32L4XX_NUCLEO))
+    I2C_EXPBD_Handle.Init.Timing = NUCLEO_I2C_EXPBD_TIMING_400KHZ;    /* 400KHz */
+#endif
+
+    I2C_EXPBD_Handle.Init.OwnAddress1    = 0x33;
+    I2C_EXPBD_Handle.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+    I2C_EXPBD_Handle.Instance            = NUCLEO_I2C_EXPBD;
+
+    /* Init the I2C */
+    I2C_EXPBD_MspInit();
+    HAL_I2C_Init(&I2C_EXPBD_Handle);
+  }
+
+  if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_READY)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+/**
  * @brief I2C MSP Initialization
  * @param None
  * @retval None
@@ -199,8 +240,7 @@ uint8_t Mems::I2C_EXPBD_ReadData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer,
 {
 	HAL_StatusTypeDef status = HAL_OK;
 
-	status = HAL_I2C_Mem_Read(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size,
-			I2C_EXPBD_Timeout);
+	status = HAL_I2C_Mem_Read(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size, I2C_EXPBD_Timeout);
 
 	/* Check the communication status */
 	if (status != HAL_OK)
@@ -230,8 +270,7 @@ uint8_t Mems::I2C_EXPBD_WriteData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer,
 {
 	HAL_StatusTypeDef status = HAL_OK;
 
-	status = HAL_I2C_Mem_Write(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size,
-			I2C_EXPBD_Timeout);
+	status = HAL_I2C_Mem_Write(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size, I2C_EXPBD_Timeout);
 
 	/* Check the communication status */
 	if (status != HAL_OK)

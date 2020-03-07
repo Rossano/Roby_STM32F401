@@ -25,6 +25,7 @@ extern "C" {
 #define NULL ( void * )0
 #endif
 
+#define LSM6DS0_X_0				0
 /**
  * @}
  */

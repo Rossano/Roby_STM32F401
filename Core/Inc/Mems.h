@@ -8,8 +8,9 @@
 #ifndef SRC_MEMS_H_
 #define SRC_MEMS_H_
 
-#include <Xlsm6dso.h>
-#include <Glsm6dso.h>
+#include <Glsm6ds0.h>
+#include <stdint.h>
+#include <Xlsm6ds0.h>
 
 
 /* Includes ------------------------------------------------------------------*/
@@ -223,10 +224,28 @@
 #define M_INT2_EXTI_IRQn           EXTI0_1_IRQn
 #endif
 
+
+/**
+ * 	BOARD
+ */
+#define NUCLEO_I2C_EXPBD_SPEED                         400000
+#define NUCLEO_I2C_EXPBD_TIMEOUT_MAX    0x1000 /*<! The value of the maximal timeout for BUS waiting loops */
+
+extern I2C_HandleTypeDef	hi2c1;
+#define I2C_EXPBD_Handle	hi2c1
+
+#define NUCLEO_I2C_EXPBD_EV_IRQn                    I2C1_EV_IRQn
+#define NUCLEO_I2C_EXPBD_ER_IRQn                    I2C1_ER_IRQn
+
+uint32_t I2C_EXPBD_Timeout;
+
+/**
+ * Mems CLass
+ */
 class Mems {
 public:
-	X_lsm6dso * accel;
-	G_lsm6dso * gyro;
+	X_lsm6ds0 * accel;
+	G_lsm6ds0 * gyro;
 public:
 	Mems();
 	virtual ~Mems();
@@ -237,6 +256,7 @@ private:
 	uint8_t Sensor_IO_Write(void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint16_t nBytesToWrite);
 	uint8_t Sensor_IO_Read(void *handle, uint8_t ReadAddr, uint8_t *pBuffer, uint16_t nBytesToRead);
 
+	uint8_t I2C_EXPBD_Init(void);
 	void I2C_EXPBD_MspInit(void);
 	void I2C_EXPBD_Error(uint8_t Addr);
 	uint8_t I2C_EXPBD_ReadData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer, uint16_t Size);

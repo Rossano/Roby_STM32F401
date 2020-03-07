@@ -49,10 +49,10 @@ public:
 	virtual DrvStatusTypeDef DeInit (DrvContextTypeDef &);
 	virtual DrvStatusTypeDef Sensor_Enable (DrvContextTypeDef &);
 	virtual DrvStatusTypeDef Sensor_Disable (DrvContextTypeDef &);
-	virtual DrvStatusTypeDef Get_WhoAmI (DrvContextTypeDef *, uint8_t &);
+	virtual DrvStatusTypeDef Get_WhoAmI (DrvContextTypeDef &, uint8_t &);
 	virtual DrvStatusTypeDef Check_WhoAmI (DrvContextTypeDef &);
-	virtual DrvStatusTypeDef Get_Axes (DrvContextTypeDef *, SensorAxes_t &);
-	virtual DrvStatusTypeDef Get_AxesRaw (DrvContextTypeDef *, SensorAxesRaw_t &);
+	virtual DrvStatusTypeDef Get_Axes (DrvContextTypeDef &, SensorAxes_t &);
+	virtual DrvStatusTypeDef Get_AxesRaw (DrvContextTypeDef &, SensorAxesRaw_t &);
 	virtual DrvStatusTypeDef Get_Sensitivity (DrvContextTypeDef &, float &);
 	virtual DrvStatusTypeDef Get_ODR (DrvContextTypeDef &, float &);
 	virtual DrvStatusTypeDef Set_ODR (DrvContextTypeDef &, SensorOdr_t);

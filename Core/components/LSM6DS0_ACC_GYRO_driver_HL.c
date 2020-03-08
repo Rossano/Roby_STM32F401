@@ -36,6 +36,7 @@
  ******************************************************************************
  */
 
+
 /* Includes ------------------------------------------------------------------*/
 
 #include "LSM6DS0_ACC_GYRO_driver_HL.h"
@@ -2233,7 +2234,6 @@ static DrvStatusTypeDef LSM6DS0_X_Set_INT1_DRDY(DrvContextTypeDef *handle, INT1_
 
   return COMPONENT_OK;
 }
-
 
 /**
 * @}

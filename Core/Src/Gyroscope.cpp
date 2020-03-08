@@ -7,6 +7,8 @@
 
 #include <Gyroscope.h>
 
+GYRO_Data_t GYRO_DATA;
+
 Gyroscope::Gyroscope(DrvContextTypeDef &ctx) {
 	// TODO Auto-generated constructor stub
 	this->ctx = new DrvContextTypeDef();

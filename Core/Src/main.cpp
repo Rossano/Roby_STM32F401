@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <Mems.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,6 +44,8 @@
 I2C_HandleTypeDef hi2c1;
 
 UART_HandleTypeDef huart2;
+
+Mems *mems;
 
 /* USER CODE BEGIN PV */
 
@@ -95,6 +97,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+
+  mems = new Mems();
 
   /* USER CODE END 2 */
 

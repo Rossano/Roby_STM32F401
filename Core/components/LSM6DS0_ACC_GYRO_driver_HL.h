@@ -47,8 +47,9 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "accelerometer.h"
-#include "gyroscope.h"
+//#include "accelerometer.h"
+//#include "gyroscope.h"
+#include <sensor.h>
 
 /* Include accelero sensor component drivers. */
 #include "LSM6DS0_ACC_GYRO_driver.h"

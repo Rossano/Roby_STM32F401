@@ -9,6 +9,7 @@
 #define X_LSM6DS0_H_
 
 #include <sensor.h>
+#include <board.h>
 #include <Accelerometer.h>
 #include <LSM6DS0_ACC_GYRO_driver.h>
 #include <LSM6DS0_ACC_GYRO_driver_HL.h>
@@ -20,6 +21,7 @@ private:
 	//ACCELERO_Drv_t	*driver;
 	LSM6DS0_X_Data_t LSM6DS0_X_0_Data;
 	LSM6DS0_Combo_Data_t LSM6DS0_Combo_Data;
+	uint8_t I2C_EXPBD_Init(void);
 public:
 	X_lsm6ds0(DrvContextTypeDef &);
 	~X_lsm6ds0();
@@ -44,6 +46,8 @@ public:
 	DrvStatusTypeDef Read_Reg (DrvContextTypeDef &, uint8_t, uint8_t &);
 	DrvStatusTypeDef Write_Reg (DrvContextTypeDef &, uint8_t, uint8_t);
 	DrvStatusTypeDef Get_DRDY_Status (DrvContextTypeDef &, uint8_t &);
+	DrvStatusTypeDef Sensor_IO_Init(void);
+	DrvStatusTypeDef LSM6DS0_Sensor_IO_ITConfig(void);
 };
 
 #endif /* X_LSM6DS0_H_ */

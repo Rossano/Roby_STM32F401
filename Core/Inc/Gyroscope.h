@@ -12,8 +12,8 @@
 #include "sensor.h"
 
 class Gyroscope {
-	DrvContextTypeDef *ctx;
 public:
+	DrvContextTypeDef *ctx;
 	Gyroscope(DrvContextTypeDef &);
 	virtual ~Gyroscope();
 	virtual DrvStatusTypeDef Init (DrvContextTypeDef &);

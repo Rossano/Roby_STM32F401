@@ -7,6 +7,8 @@
 
 #include <Accelerometer.h>
 
+ACCELERO_Data_t ACCELERO_Data;
+
 Accelerometer::Accelerometer(DrvContextTypeDef &ctx) {
 	// TODO Auto-generated constructor stub
 	this->ctx = new DrvContextTypeDef();

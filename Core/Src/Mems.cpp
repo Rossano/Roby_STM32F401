@@ -7,77 +7,150 @@
 
 #include "Mems.h"
 
-Mems::Mems() {
+extern ACCELERO_Data_t ACCELERO_Data;
+extern GYRO_Data_t GYRO_Data;
+
+Mems::Mems()
+{
 	// TODO Auto-generated constructor stub
 
 	I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;
+
+	/* Setup sensor handle. */
+	xctx.who_am_i 		= LSM6DS0_ACC_GYRO_WHO_AM_I;
+	xctx.ifType 		= 0; /* I2C interface */
+	xctx.address 		= LSM6DS0_ACC_GYRO_I2C_ADDRESS_HIGH;
+	xctx.instance 		= LSM6DS0_X_0;
+	xctx.isInitialized = 0;
+	xctx.isEnabled     = 0;
+	xctx.isCombo       = 1;
+	xctx.pData         = &ACCELERO_Data; //(void *)&ACCELERO_Data[ LSM6DS0_X_0 ];
+//	xctx.pVTable       = (void *)&(this->ctx); //LSM6DS0_X_Drv;
+	xctx.pExtVTable    = (void *)&LSM6DS0_X_ExtDrv;
+
+//	LSM6DS0_X_0_Data.comboData = &(this->LSM6DS0_Combo_Data);
+//	ACCELERO_Data.pComponentData = (void *)&(this->LSM6DS0_X_0_Data);
+	ACCELERO_Data.pExtData = 0;
+
+	/* Setup sensor handle. */
+	gctx.who_am_i 		= LSM6DS0_ACC_GYRO_WHO_AM_I;
+	gctx.ifType 		= 0; /* I2C interface */
+	gctx.address 		= LSM6DS0_ACC_GYRO_I2C_ADDRESS_HIGH;
+	gctx.instance 		= LSM6DS0_G_0;
+	gctx.isInitialized = 0;
+	gctx.isEnabled     = 0;
+	gctx.isCombo       = 1;
+	gctx.pData         = &GYRO_Data; //(void *)&ACCELERO_Data[ LSM6DS0_X_0 ];
+//	gctx.pVTable       = (void *)&(this->ctx); //LSM6DS0_X_Drv;
+	gctx.pExtVTable    = 0;
+
+//	LSM6DS0_G_0_Data.comboData = &(this->LSM6DS0_Combo_Data);
+//	GYRO_Data.pComponentData = (void *)&(this->LSM6DS0_G_0_Data);
+	GYRO_Data.pExtData = 0;
+
+	accel = new X_lsm6ds0(xctx);
+	gyro = new G_lsm6ds0(gctx);
 }
 
 Mems::~Mems() {
 	// TODO Auto-generated destructor stub
 }
 
-DrvStatusTypeDef Mems::Sensor_IO_Init(void)
+DrvStatusTypeDef Mems::Initialize_Sensors()
 {
-	if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_RESET)
+	DrvContextTypeDef Xfoo;
+	DrvContextTypeDef Gfoo;
+	if( this->accel->Init(Xfoo) == COMPONENT_OK)
 	{
-
-		/* I2C_EXPBD peripheral configuration */
-
-#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)) || defined(STM32F401xE))
-		I2C_EXPBD_Handle.Init.ClockSpeed = NUCLEO_I2C_EXPBD_SPEED;
-		I2C_EXPBD_Handle.Init.DutyCycle = I2C_DUTYCYCLE_2;
-#endif
-
-#if (defined (USE_STM32L0XX_NUCLEO) || defined (USE_STM32L4XX_NUCLEO))
-		I2C_EXPBD_Handle.Init.Timing = NUCLEO_I2C_EXPBD_TIMING_400KHZ;    /* 400KHz */
-#endif
-
-		I2C_EXPBD_Handle.Init.OwnAddress1    = 0x33;
-		I2C_EXPBD_Handle.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-		I2C_EXPBD_Handle.Instance            = NUCLEO_I2C_EXPBD;
-
-		/* Init the I2C */
-		I2C_EXPBD_MspInit();
-		HAL_I2C_Init(&I2C_EXPBD_Handle);
+		return this->gyro->Init(Gfoo);
 	}
-
-	if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_READY)
-	{
-		return COMPONENT_ERROR;
-	}
-	else
-	{
-		return COMPONENT_OK;
-	}
+	else return COMPONENT_ERROR;
 }
 
-/**
- * @brief  Configures sensor interrupts interface for LSM6DS0 sensor).
- * @param  None
- * @retval COMPONENT_OK in case of success
- * @retval COMPONENT_ERROR in case of failure
- */
-DrvStatusTypeDef Mems::LSM6DS0_Sensor_IO_ITConfig(void)
+DrvStatusTypeDef Mems::Enalble_Sensors()
 {
-	GPIO_InitTypeDef GPIO_InitStructureInt1;
-
-	/* Enable INT1 GPIO clock */
-	LSM6DS0_INT1_GPIO_CLK_ENABLE();
-
-	/* Configure GPIO PINs to detect Interrupts */
-	GPIO_InitStructureInt1.Pin = LSM6DS0_INT1_PIN;
-	GPIO_InitStructureInt1.Mode = GPIO_MODE_IT_RISING;
-	GPIO_InitStructureInt1.Speed = GPIO_SPEED_FREQ_HIGH;
-	GPIO_InitStructureInt1.Pull  = GPIO_NOPULL;
-	HAL_GPIO_Init(LSM6DS0_INT1_GPIO_PORT, &GPIO_InitStructureInt1);
-
-	/* Enable and set EXTI Interrupt priority */
-	HAL_NVIC_SetPriority(LSM6DS0_INT1_EXTI_IRQn, 0x00, 0x00);
-	HAL_NVIC_EnableIRQ(LSM6DS0_INT1_EXTI_IRQn);
-
-	return COMPONENT_OK;
+	DrvContextTypeDef Xfoo;
+	DrvContextTypeDef Gfoo;
+	if( this->accel->Sensor_Enable(Xfoo) == COMPONENT_OK)
+	{
+		return this->gyro->Sensor_Enable(Gfoo);
+	}
+	else return COMPONENT_ERROR;
 }
+
+DrvStatusTypeDef Mems::Disable_Sensors()
+{
+	return COMPONENT_NOT_IMPLEMENTED;
+}
+
+SensorAxes_t Mems::ReadAccelero() {
+}
+
+SensorAxes_t Mems::ReadGyro() {
+}
+
+//
+//DrvStatusTypeDef Mems::Sensor_IO_Init(void)
+//{
+//	if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_RESET)
+//	{
+//
+//		/* I2C_EXPBD peripheral configuration */
+//
+//#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)) || defined(STM32F401xE))
+//		I2C_EXPBD_Handle.Init.ClockSpeed = NUCLEO_I2C_EXPBD_SPEED;
+//		I2C_EXPBD_Handle.Init.DutyCycle = I2C_DUTYCYCLE_2;
+//#endif
+//
+//#if (defined (USE_STM32L0XX_NUCLEO) || defined (USE_STM32L4XX_NUCLEO))
+//		I2C_EXPBD_Handle.Init.Timing = NUCLEO_I2C_EXPBD_TIMING_400KHZ;    /* 400KHz */
+//#endif
+//
+//		I2C_EXPBD_Handle.Init.OwnAddress1    = 0x33;
+//		I2C_EXPBD_Handle.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+//		I2C_EXPBD_Handle.Instance            = NUCLEO_I2C_EXPBD;
+//
+//		/* Init the I2C */
+//		I2C_EXPBD_MspInit();
+//		HAL_I2C_Init(&I2C_EXPBD_Handle);
+//	}
+//
+//	if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_READY)
+//	{
+//		return COMPONENT_ERROR;
+//	}
+//	else
+//	{
+//		return COMPONENT_OK;
+//	}
+//}
+//
+///**
+// * @brief  Configures sensor interrupts interface for LSM6DS0 sensor).
+// * @param  None
+// * @retval COMPONENT_OK in case of success
+// * @retval COMPONENT_ERROR in case of failure
+// */
+//DrvStatusTypeDef Mems::LSM6DS0_Sensor_IO_ITConfig(void)
+//{
+//	GPIO_InitTypeDef GPIO_InitStructureInt1;
+//
+//	/* Enable INT1 GPIO clock */
+//	LSM6DS0_INT1_GPIO_CLK_ENABLE();
+//
+//	/* Configure GPIO PINs to detect Interrupts */
+//	GPIO_InitStructureInt1.Pin = LSM6DS0_INT1_PIN;
+//	GPIO_InitStructureInt1.Mode = GPIO_MODE_IT_RISING;
+//	GPIO_InitStructureInt1.Speed = GPIO_SPEED_FREQ_HIGH;
+//	GPIO_InitStructureInt1.Pull  = GPIO_NOPULL;
+//	HAL_GPIO_Init(LSM6DS0_INT1_GPIO_PORT, &GPIO_InitStructureInt1);
+//
+//	/* Enable and set EXTI Interrupt priority */
+//	HAL_NVIC_SetPriority(LSM6DS0_INT1_EXTI_IRQn, 0x00, 0x00);
+//	HAL_NVIC_EnableIRQ(LSM6DS0_INT1_EXTI_IRQn);
+//
+//	return COMPONENT_OK;
+//}
 
 /**
  * @brief  Writes a buffer to the sensor
@@ -129,87 +202,87 @@ uint8_t Mems::Sensor_IO_Read(void *handle, uint8_t ReadAddr, uint8_t *pBuffer,
 	}
 }
 
-/**
- * @brief  Configures I2C interface.
- * @param  None
- * @retval 0 in case of success
- * @retval 1 in case of failure
- */
-uint8_t Mems::I2C_EXPBD_Init(void)
-{
-  if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_RESET)
-  {
-
-    /* I2C_EXPBD peripheral configuration */
-
-#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)) || defined(STM32F401xE))
-    I2C_EXPBD_Handle.Init.ClockSpeed = NUCLEO_I2C_EXPBD_SPEED;
-    I2C_EXPBD_Handle.Init.DutyCycle = I2C_DUTYCYCLE_2;
-#endif
-
-#if (defined (USE_STM32L0XX_NUCLEO) || defined (USE_STM32L4XX_NUCLEO))
-    I2C_EXPBD_Handle.Init.Timing = NUCLEO_I2C_EXPBD_TIMING_400KHZ;    /* 400KHz */
-#endif
-
-    I2C_EXPBD_Handle.Init.OwnAddress1    = 0x33;
-    I2C_EXPBD_Handle.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-    I2C_EXPBD_Handle.Instance            = NUCLEO_I2C_EXPBD;
-
-    /* Init the I2C */
-    I2C_EXPBD_MspInit();
-    HAL_I2C_Init(&I2C_EXPBD_Handle);
-  }
-
-  if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_READY)
-  {
-    return 0;
-  }
-  else
-  {
-    return 1;
-  }
-}
-/**
- * @brief I2C MSP Initialization
- * @param None
- * @retval None
- */
-void Mems::I2C_EXPBD_MspInit(void)
-{
-	GPIO_InitTypeDef  GPIO_InitStruct;
-
-	/* Enable I2C GPIO clocks */
-	NUCLEO_I2C_EXPBD_SCL_SDA_GPIO_CLK_ENABLE();
-
-	/* I2C_EXPBD SCL and SDA pins configuration -------------------------------------*/
-	GPIO_InitStruct.Pin        = NUCLEO_I2C_EXPBD_SCL_PIN | NUCLEO_I2C_EXPBD_SDA_PIN;
-	GPIO_InitStruct.Mode       = GPIO_MODE_AF_OD;
-	GPIO_InitStruct.Speed      = GPIO_SPEED_FREQ_HIGH;
-	GPIO_InitStruct.Pull       = GPIO_NOPULL;
-	GPIO_InitStruct.Alternate  = NUCLEO_I2C_EXPBD_SCL_SDA_AF;
-
-	HAL_GPIO_Init(NUCLEO_I2C_EXPBD_SCL_SDA_GPIO_PORT, &GPIO_InitStruct);
-
-	/* Enable the I2C_EXPBD peripheral clock */
-	NUCLEO_I2C_EXPBD_CLK_ENABLE();
-
-	/* Force the I2C peripheral clock reset */
-	NUCLEO_I2C_EXPBD_FORCE_RESET();
-
-	/* Release the I2C peripheral clock reset */
-	NUCLEO_I2C_EXPBD_RELEASE_RESET();
-
-	/* Enable and set I2C_EXPBD Interrupt to the highest priority */
-	HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_EV_IRQn, 0, 0);
-	HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_EV_IRQn);
-
-#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)) || (defined (USE_STM32L4XX_NUCLEO)))
-	/* Enable and set I2C_EXPBD Interrupt to the highest priority */
-	HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_ER_IRQn, 0, 0);
-	HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_ER_IRQn);
-#endif
-
-}
+///**
+// * @brief  Configures I2C interface.
+// * @param  None
+// * @retval 0 in case of success
+// * @retval 1 in case of failure
+// */
+//uint8_t Mems::I2C_EXPBD_Init(void)
+//{
+//  if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_RESET)
+//  {
+//
+//    /* I2C_EXPBD peripheral configuration */
+//
+//#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)) || defined(STM32F401xE))
+//    I2C_EXPBD_Handle.Init.ClockSpeed = NUCLEO_I2C_EXPBD_SPEED;
+//    I2C_EXPBD_Handle.Init.DutyCycle = I2C_DUTYCYCLE_2;
+//#endif
+//
+//#if (defined (USE_STM32L0XX_NUCLEO) || defined (USE_STM32L4XX_NUCLEO))
+//    I2C_EXPBD_Handle.Init.Timing = NUCLEO_I2C_EXPBD_TIMING_400KHZ;    /* 400KHz */
+//#endif
+//
+//    I2C_EXPBD_Handle.Init.OwnAddress1    = 0x33;
+//    I2C_EXPBD_Handle.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+//    I2C_EXPBD_Handle.Instance            = NUCLEO_I2C_EXPBD;
+//
+//    /* Init the I2C */
+//    I2C_EXPBD_MspInit();
+//    HAL_I2C_Init(&I2C_EXPBD_Handle);
+//  }
+//
+//  if (HAL_I2C_GetState(&I2C_EXPBD_Handle) == HAL_I2C_STATE_READY)
+//  {
+//    return 0;
+//  }
+//  else
+//  {
+//    return 1;
+//  }
+//}
+///**
+// * @brief I2C MSP Initialization
+// * @param None
+// * @retval None
+// */
+//void Mems::I2C_EXPBD_MspInit(void)
+//{
+//	GPIO_InitTypeDef  GPIO_InitStruct;
+//
+//	/* Enable I2C GPIO clocks */
+//	NUCLEO_I2C_EXPBD_SCL_SDA_GPIO_CLK_ENABLE();
+//
+//	/* I2C_EXPBD SCL and SDA pins configuration -------------------------------------*/
+//	GPIO_InitStruct.Pin        = NUCLEO_I2C_EXPBD_SCL_PIN | NUCLEO_I2C_EXPBD_SDA_PIN;
+//	GPIO_InitStruct.Mode       = GPIO_MODE_AF_OD;
+//	GPIO_InitStruct.Speed      = GPIO_SPEED_FREQ_HIGH;
+//	GPIO_InitStruct.Pull       = GPIO_NOPULL;
+//	GPIO_InitStruct.Alternate  = NUCLEO_I2C_EXPBD_SCL_SDA_AF;
+//
+//	HAL_GPIO_Init(NUCLEO_I2C_EXPBD_SCL_SDA_GPIO_PORT, &GPIO_InitStruct);
+//
+//	/* Enable the I2C_EXPBD peripheral clock */
+//	NUCLEO_I2C_EXPBD_CLK_ENABLE();
+//
+//	/* Force the I2C peripheral clock reset */
+//	NUCLEO_I2C_EXPBD_FORCE_RESET();
+//
+//	/* Release the I2C peripheral clock reset */
+//	NUCLEO_I2C_EXPBD_RELEASE_RESET();
+//
+//	/* Enable and set I2C_EXPBD Interrupt to the highest priority */
+//	HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_EV_IRQn, 0, 0);
+//	HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_EV_IRQn);
+//
+//#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)) || (defined (USE_STM32L4XX_NUCLEO)))
+//	/* Enable and set I2C_EXPBD Interrupt to the highest priority */
+//	HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_ER_IRQn, 0, 0);
+//	HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_ER_IRQn);
+//#endif
+//
+//}
 
 /**
  * @brief  Manages error callback by re-initializing I2C

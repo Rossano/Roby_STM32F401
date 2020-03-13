@@ -9,6 +9,7 @@
 #define SRC_MEMS_H_
 
 #include <stdint.h>
+#include <board.h>
 #include <Xlsm6ds0.h>
 #include <Glsm6ds0.h>
 
@@ -89,8 +90,8 @@ private:
 	DrvContextTypeDef xctx;
 	DrvContextTypeDef gctx;
 	/* Link function for sensor peripheral */
-	uint8_t Sensor_IO_Write(void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint16_t nBytesToWrite);
-	uint8_t Sensor_IO_Read(void *handle, uint8_t ReadAddr, uint8_t *pBuffer, uint16_t nBytesToRead);
+//	uint8_t Sensor_IO_Write(void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint16_t nBytesToWrite);
+//	uint8_t Sensor_IO_Read(void *handle, uint8_t ReadAddr, uint8_t *pBuffer, uint16_t nBytesToRead);
 
 //	uint8_t I2C_EXPBD_Init(void);
 //	void I2C_EXPBD_MspInit(void);

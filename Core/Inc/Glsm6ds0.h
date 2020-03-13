@@ -8,9 +8,10 @@
 #ifndef G_LSM6DSO_H_
 #define G_LSM6DSO_H_
 
-#include <sensor.h>
-#include <board.h>
+//#include <board.h>
+//#include <sensor.h>
 #include <Gyroscope.h>
+#include <board.h>
 #include <LSM6DS0_ACC_GYRO_driver_HL.h>
 
 #define IKS01A1_LSM6DS0_WHO_AM_I       (uint8_t)0x68
@@ -19,7 +20,7 @@ class G_lsm6ds0: public Gyroscope {
 private:
 	LSM6DS0_G_Data_t LSM6DS0_G_0_Data;
 	LSM6DS0_Combo_Data_t LSM6DS0_Combo_Data;
-	uint8_t I2C_EXPBD_Init(void);
+//	uint8_t I2C_EXPBD_Init(void);
 public:
 	G_lsm6ds0(DrvContextTypeDef &);
 	~G_lsm6ds0();

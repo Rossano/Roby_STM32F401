@@ -8,9 +8,14 @@
 #ifndef INC_BOARD_H_
 #define INC_BOARD_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "stm32f4xx_hal.h"
 #include "main.h"
 
+#include <sensor.h>
 
 /* I2C clock speed configuration (in Hz) */
 #if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)))
@@ -206,6 +211,31 @@ uint8_t I2C_EXPBD_Init(void);
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-uint8_t AccGyro_Sensor_IO_ITConfig(void);
+uint8_t AccGyro_Sensor_IO_IT_Config(void);
 
+/**
+ * @brief  Reads a from the sensor to buffer
+ * @param  handle instance handle
+ * @param  ReadAddr specifies the internal sensor address register to be read from
+ * @param  pBuffer pointer to data buffer
+ * @param  nBytesToRead number of bytes to be read
+ * @retval 0 in case of success
+ * @retval 1 in case of failure
+ */
+uint8_t Sensor_IO_Read(void *handle, uint8_t ReadAddr, uint8_t *pBuffer, uint16_t nBytesToRead);
+
+/**
+ * @brief  Writes a buffer to the sensor
+ * @param  handle instance handle
+ * @param  WriteAddr specifies the internal sensor address register to be written to
+ * @param  pBuffer pointer to data buffer
+ * @param  nBytesToWrite number of bytes to be written
+ * @retval 0 in case of success
+ * @retval 1 in case of failure
+ */
+uint8_t Sensor_IO_Write(void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint16_t nBytesToWrite);
+
+#ifdef __cplusplus
+}
+#endif
 #endif /* INC_BOARD_H_ */

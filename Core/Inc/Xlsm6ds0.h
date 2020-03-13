@@ -8,10 +8,11 @@
 #ifndef X_LSM6DS0_H_
 #define X_LSM6DS0_H_
 
-#include <sensor.h>
-#include <board.h>
+//#include <sensor.h>
+//#include <board.h>
 #include <Accelerometer.h>
-#include <LSM6DS0_ACC_GYRO_driver.h>
+#include <board.h>
+//#include <LSM6DS0_ACC_GYRO_driver.h>
 #include <LSM6DS0_ACC_GYRO_driver_HL.h>
 
 #define IKS01A1_LSM6DS0_WHO_AM_I       (uint8_t)0x68
@@ -21,7 +22,7 @@ private:
 	//ACCELERO_Drv_t	*driver;
 	LSM6DS0_X_Data_t LSM6DS0_X_0_Data;
 	LSM6DS0_Combo_Data_t LSM6DS0_Combo_Data;
-	uint8_t I2C_EXPBD_Init(void);
+//	uint8_t I2C_EXPBD_Init(void);
 public:
 	X_lsm6ds0(DrvContextTypeDef &);
 	~X_lsm6ds0();

@@ -6,7 +6,9 @@
  */
 
 #include <board.h>
+#include <sensor.h>
 
+uint32_t I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;    /*<! Value of Timeout when I2C communication fails */
 /**
  * @brief I2C MSP Initialization
  * @param None
@@ -96,7 +98,7 @@ uint8_t I2C_EXPBD_Init(void)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-uint8_t AccGyro_Sensor_IO_ITConfig(void)
+uint8_t AccGyro_Sensor_IO_IT_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructureInt1;
 
@@ -117,4 +119,129 @@ uint8_t AccGyro_Sensor_IO_ITConfig(void)
   return 0;
 }
 
+/**
+ * @brief  Manages error callback by re-initializing I2C
+ * @param  Addr I2C Address
+ * @retval None
+ */
+void I2C_EXPBD_Error(uint8_t Addr)
+{
 
+  /* De-initialize the I2C comunication bus */
+  HAL_I2C_DeInit(&I2C_EXPBD_Handle);
+
+  /* Re-Initiaize the I2C comunication bus */
+  I2C_EXPBD_Init();
+}
+
+/**
+ * @brief  Write data to the register of the device through BUS
+ * @param  Addr Device address on BUS
+ * @param  Reg The target register address to be written
+ * @param  pBuffer The data to be written
+ * @param  Size Number of bytes to be written
+ * @retval 0 in case of success
+ * @retval 1 in case of failure
+ */
+uint8_t I2C_EXPBD_WriteData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer, uint16_t Size)
+{
+
+  HAL_StatusTypeDef status = HAL_OK;
+
+  status = HAL_I2C_Mem_Write(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size,
+                             I2C_EXPBD_Timeout);
+
+  /* Check the communication status */
+  if (status != HAL_OK)
+  {
+
+    /* Execute user timeout callback */
+    I2C_EXPBD_Error(Addr);
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+
+
+/**
+ * @brief  Read a register of the device through BUS
+ * @param  Addr Device address on BUS
+ * @param  Reg The target register address to read
+ * @param  pBuffer The data to be read
+ * @param  Size Number of bytes to be read
+ * @retval 0 in case of success
+ * @retval 1 in case of failure
+ */
+uint8_t I2C_EXPBD_ReadData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer, uint16_t Size)
+{
+
+  HAL_StatusTypeDef status = HAL_OK;
+
+  status = HAL_I2C_Mem_Read(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size,
+                            I2C_EXPBD_Timeout);
+
+  /* Check the communication status */
+  if (status != HAL_OK)
+  {
+
+    /* Execute user timeout callback */
+    I2C_EXPBD_Error(Addr);
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+/**
+ * @brief  Writes a buffer to the sensor
+ * @param  handle instance handle
+ * @param  WriteAddr specifies the internal sensor address register to be written to
+ * @param  pBuffer pointer to data buffer
+ * @param  nBytesToWrite number of bytes to be written
+ * @retval 0 in case of success
+ * @retval 1 in case of failure
+ */
+uint8_t Sensor_IO_Write(void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint16_t nBytesToWrite)
+{
+	DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+
+	/* call I2C_EXPBD Write data bus function */
+	if (I2C_EXPBD_WriteData(ctx->address, WriteAddr, pBuffer, nBytesToWrite))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * @brief  Reads a from the sensor to buffer
+ * @param  handle instance handle
+ * @param  ReadAddr specifies the internal sensor address register to be read from
+ * @param  pBuffer pointer to data buffer
+ * @param  nBytesToRead number of bytes to be read
+ * @retval 0 in case of success
+ * @retval 1 in case of failure
+ */
+uint8_t Sensor_IO_Read(void *handle, uint8_t ReadAddr, uint8_t *pBuffer, uint16_t nBytesToRead)
+{
+	DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+
+	/* call I2C_EXPBD Read data bus function */
+	if (I2C_EXPBD_ReadData(ctx->address, ReadAddr, pBuffer, nBytesToRead))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}

@@ -5,10 +5,10 @@
  *  Author: Ross
  */
 
-#include <LSM6DS0_ACC_GYRO_driver_HL.h>
+//#include <LSM6DS0_ACC_GYRO_driver_HL.h>
 #include <Glsm6ds0.h>
 
-extern GYRO_Data_t GYRO_Data;
+GYRO_Data_t GYRO_Data;
 
 G_lsm6ds0::G_lsm6ds0(DrvContextTypeDef &ctx):
 			Gyroscope(ctx){
@@ -169,7 +169,7 @@ DrvStatusTypeDef G_lsm6ds0::Sensor_IO_Init(void)
 
 DrvStatusTypeDef G_lsm6ds0::LSM6DS0_Sensor_IO_ITConfig(void)
 {
-	if(AccGyro_Sensor_IO_ITConfig())
+	if(AccGyro_Sensor_IO_IT_Config())
 	{
 		return COMPONENT_OK;
 	}

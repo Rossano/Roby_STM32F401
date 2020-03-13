@@ -60,47 +60,47 @@
  * @{
  */
 
-static DrvStatusTypeDef LSM6DS0_X_Init(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_X_DeInit(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_X_Sensor_Enable(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_X_Sensor_Disable(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_X_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i);
-static DrvStatusTypeDef LSM6DS0_X_Check_WhoAmI(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_X_Get_Axes(DrvContextTypeDef *handle, SensorAxes_t *acceleration);
-static DrvStatusTypeDef LSM6DS0_X_Get_AxesRaw(DrvContextTypeDef *handle, SensorAxesRaw_t *value);
-static DrvStatusTypeDef LSM6DS0_X_Get_Sensitivity(DrvContextTypeDef *handle, float *sensitivity);
-static DrvStatusTypeDef LSM6DS0_X_Get_ODR(DrvContextTypeDef *handle, float *odr);
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t odr);
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value(DrvContextTypeDef *handle, float odr);
-static DrvStatusTypeDef LSM6DS0_X_Get_FS(DrvContextTypeDef *handle, float *fullScale);
-static DrvStatusTypeDef LSM6DS0_X_Set_FS(DrvContextTypeDef *handle, SensorFs_t fs);
-static DrvStatusTypeDef LSM6DS0_X_Set_FS_Value(DrvContextTypeDef *handle, float fullScale);
-static DrvStatusTypeDef LSM6DS0_X_Get_Axes_Status(DrvContextTypeDef *handle, uint8_t *xyz_enabled);
-static DrvStatusTypeDef LSM6DS0_X_Set_Axes_Status(DrvContextTypeDef *handle, uint8_t *enable_xyz);
-static DrvStatusTypeDef LSM6DS0_X_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data);
-static DrvStatusTypeDef LSM6DS0_X_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data);
-static DrvStatusTypeDef LSM6DS0_X_Get_DRDY_Status(DrvContextTypeDef *handle, uint8_t *status);
+DrvStatusTypeDef LSM6DS0_X_Init(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_X_DeInit(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_X_Sensor_Enable(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_X_Sensor_Disable(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_X_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i);
+DrvStatusTypeDef LSM6DS0_X_Check_WhoAmI(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_X_Get_Axes(DrvContextTypeDef *handle, SensorAxes_t *acceleration);
+DrvStatusTypeDef LSM6DS0_X_Get_AxesRaw(DrvContextTypeDef *handle, SensorAxesRaw_t *value);
+DrvStatusTypeDef LSM6DS0_X_Get_Sensitivity(DrvContextTypeDef *handle, float *sensitivity);
+DrvStatusTypeDef LSM6DS0_X_Get_ODR(DrvContextTypeDef *handle, float *odr);
+DrvStatusTypeDef LSM6DS0_X_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t odr);
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value(DrvContextTypeDef *handle, float odr);
+DrvStatusTypeDef LSM6DS0_X_Get_FS(DrvContextTypeDef *handle, float *fullScale);
+DrvStatusTypeDef LSM6DS0_X_Set_FS(DrvContextTypeDef *handle, SensorFs_t fs);
+DrvStatusTypeDef LSM6DS0_X_Set_FS_Value(DrvContextTypeDef *handle, float fullScale);
+DrvStatusTypeDef LSM6DS0_X_Get_Axes_Status(DrvContextTypeDef *handle, uint8_t *xyz_enabled);
+DrvStatusTypeDef LSM6DS0_X_Set_Axes_Status(DrvContextTypeDef *handle, uint8_t *enable_xyz);
+DrvStatusTypeDef LSM6DS0_X_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data);
+DrvStatusTypeDef LSM6DS0_X_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data);
+DrvStatusTypeDef LSM6DS0_X_Get_DRDY_Status(DrvContextTypeDef *handle, uint8_t *status);
 
-static DrvStatusTypeDef LSM6DS0_G_Init(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_G_DeInit(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_G_Sensor_Enable(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_G_Sensor_Disable(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_G_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i);
-static DrvStatusTypeDef LSM6DS0_G_Check_WhoAmI(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_G_Get_Axes(DrvContextTypeDef *handle, SensorAxes_t *angular_velocity);
-static DrvStatusTypeDef LSM6DS0_G_Get_AxesRaw(DrvContextTypeDef *handle, SensorAxesRaw_t *value);
-static DrvStatusTypeDef LSM6DS0_G_Get_Sensitivity(DrvContextTypeDef *handle, float *sensitivity);
-static DrvStatusTypeDef LSM6DS0_G_Get_ODR(DrvContextTypeDef *handle, float *odr);
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t odr);
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value(DrvContextTypeDef *handle, float odr);
-static DrvStatusTypeDef LSM6DS0_G_Get_FS(DrvContextTypeDef *handle, float *fullScale);
-static DrvStatusTypeDef LSM6DS0_G_Set_FS(DrvContextTypeDef *handle, SensorFs_t fullScale);
-static DrvStatusTypeDef LSM6DS0_G_Set_FS_Value(DrvContextTypeDef *handle, float fullScale);
-static DrvStatusTypeDef LSM6DS0_G_Get_Axes_Status(DrvContextTypeDef *handle, uint8_t *xyz_enabled);
-static DrvStatusTypeDef LSM6DS0_G_Set_Axes_Status(DrvContextTypeDef *handle, uint8_t *enable_xyz);
-static DrvStatusTypeDef LSM6DS0_G_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data);
-static DrvStatusTypeDef LSM6DS0_G_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data);
-static DrvStatusTypeDef LSM6DS0_G_Get_DRDY_Status(DrvContextTypeDef *handle, uint8_t *status);
+DrvStatusTypeDef LSM6DS0_G_Init(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_G_DeInit(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_G_Sensor_Enable(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_G_Sensor_Disable(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_G_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i);
+DrvStatusTypeDef LSM6DS0_G_Check_WhoAmI(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_G_Get_Axes(DrvContextTypeDef *handle, SensorAxes_t *angular_velocity);
+DrvStatusTypeDef LSM6DS0_G_Get_AxesRaw(DrvContextTypeDef *handle, SensorAxesRaw_t *value);
+DrvStatusTypeDef LSM6DS0_G_Get_Sensitivity(DrvContextTypeDef *handle, float *sensitivity);
+DrvStatusTypeDef LSM6DS0_G_Get_ODR(DrvContextTypeDef *handle, float *odr);
+DrvStatusTypeDef LSM6DS0_G_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t odr);
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value(DrvContextTypeDef *handle, float odr);
+DrvStatusTypeDef LSM6DS0_G_Get_FS(DrvContextTypeDef *handle, float *fullScale);
+DrvStatusTypeDef LSM6DS0_G_Set_FS(DrvContextTypeDef *handle, SensorFs_t fullScale);
+DrvStatusTypeDef LSM6DS0_G_Set_FS_Value(DrvContextTypeDef *handle, float fullScale);
+DrvStatusTypeDef LSM6DS0_G_Get_Axes_Status(DrvContextTypeDef *handle, uint8_t *xyz_enabled);
+DrvStatusTypeDef LSM6DS0_G_Set_Axes_Status(DrvContextTypeDef *handle, uint8_t *enable_xyz);
+DrvStatusTypeDef LSM6DS0_G_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data);
+DrvStatusTypeDef LSM6DS0_G_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data);
+DrvStatusTypeDef LSM6DS0_G_Get_DRDY_Status(DrvContextTypeDef *handle, uint8_t *status);
 
 /**
  * @}
@@ -110,22 +110,22 @@ static DrvStatusTypeDef LSM6DS0_G_Get_DRDY_Status(DrvContextTypeDef *handle, uin
  * @{
  */
 
-static DrvStatusTypeDef LSM6DS0_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i);
-static DrvStatusTypeDef LSM6DS0_Check_WhoAmI(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data);
-static DrvStatusTypeDef LSM6DS0_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data);
+DrvStatusTypeDef LSM6DS0_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i);
+DrvStatusTypeDef LSM6DS0_Check_WhoAmI(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data);
+DrvStatusTypeDef LSM6DS0_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data);
 
-static DrvStatusTypeDef LSM6DS0_X_Get_Axes_Raw(DrvContextTypeDef *handle, int16_t *pData);
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Enabled(DrvContextTypeDef *handle, SensorOdr_t odr);
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Disabled(DrvContextTypeDef *handle, SensorOdr_t odr);
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Enabled(DrvContextTypeDef *handle, float odr);
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Disabled(DrvContextTypeDef *handle, float odr);
+DrvStatusTypeDef LSM6DS0_X_Get_Axes_Raw(DrvContextTypeDef *handle, int16_t *pData);
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Enabled(DrvContextTypeDef *handle, SensorOdr_t odr);
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Disabled(DrvContextTypeDef *handle, SensorOdr_t odr);
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Enabled(DrvContextTypeDef *handle, float odr);
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Disabled(DrvContextTypeDef *handle, float odr);
 
-static DrvStatusTypeDef LSM6DS0_G_Get_Axes_Raw(DrvContextTypeDef *handle, int16_t *pData);
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Enabled(DrvContextTypeDef *handle, SensorOdr_t odr);
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Disabled(DrvContextTypeDef *handle, SensorOdr_t odr);
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Enabled(DrvContextTypeDef *handle, float odr);
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Disabled(DrvContextTypeDef *handle, float odr);
+DrvStatusTypeDef LSM6DS0_G_Get_Axes_Raw(DrvContextTypeDef *handle, int16_t *pData);
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Enabled(DrvContextTypeDef *handle, SensorOdr_t odr);
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Disabled(DrvContextTypeDef *handle, SensorOdr_t odr);
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Enabled(DrvContextTypeDef *handle, float odr);
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Disabled(DrvContextTypeDef *handle, float odr);
 
 /**
  * @}
@@ -136,13 +136,13 @@ static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Disabled(DrvContextTypeDef 
  * @{
  */
 
-static DrvStatusTypeDef LSM6DS0_X_Get_AxesSuperRaw(DrvContextTypeDef *handle, int16_t *pData, ACTIVE_AXIS_t axl_axis);
-static DrvStatusTypeDef LSM6DS0_X_Get_Active_Axis(DrvContextTypeDef *handle, ACTIVE_AXIS_t *axl_axis);
-static DrvStatusTypeDef LSM6DS0_X_Set_Active_Axis(DrvContextTypeDef *handle, ACTIVE_AXIS_t axl_axis);
-static DrvStatusTypeDef LSM6DS0_X_Enable_HP_Filter(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_X_Disable_HP_Filter(DrvContextTypeDef *handle);
-static DrvStatusTypeDef LSM6DS0_X_ClearDRDY(DrvContextTypeDef *handle, ACTIVE_AXIS_t axl_axisActive);
-static DrvStatusTypeDef LSM6DS0_X_Set_INT1_DRDY(DrvContextTypeDef *handle, INT1_DRDY_CONFIG_t axl_drdyStatus);
+DrvStatusTypeDef LSM6DS0_X_Get_AxesSuperRaw(DrvContextTypeDef *handle, int16_t *pData, ACTIVE_AXIS_t axl_axis);
+DrvStatusTypeDef LSM6DS0_X_Get_Active_Axis(DrvContextTypeDef *handle, ACTIVE_AXIS_t *axl_axis);
+DrvStatusTypeDef LSM6DS0_X_Set_Active_Axis(DrvContextTypeDef *handle, ACTIVE_AXIS_t axl_axis);
+DrvStatusTypeDef LSM6DS0_X_Enable_HP_Filter(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_X_Disable_HP_Filter(DrvContextTypeDef *handle);
+DrvStatusTypeDef LSM6DS0_X_ClearDRDY(DrvContextTypeDef *handle, ACTIVE_AXIS_t axl_axisActive);
+DrvStatusTypeDef LSM6DS0_X_Set_INT1_DRDY(DrvContextTypeDef *handle, INT1_DRDY_CONFIG_t axl_drdyStatus);
 
 /**
  * @}
@@ -243,7 +243,7 @@ LSM6DS0_X_ExtDrv_t LSM6DS0_X_ExtDrv =
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Init(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_X_Init(DrvContextTypeDef *handle)
 {
 
   uint8_t axes_status[] = { 1, 1, 1 };
@@ -309,7 +309,7 @@ static DrvStatusTypeDef LSM6DS0_X_Init(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_DeInit(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_X_DeInit(DrvContextTypeDef *handle)
 {
   ACCELERO_Data_t *pData = (ACCELERO_Data_t *)handle->pData;
   LSM6DS0_X_Data_t *pComponentData = (LSM6DS0_X_Data_t *)pData->pComponentData;
@@ -341,7 +341,7 @@ static DrvStatusTypeDef LSM6DS0_X_DeInit(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Sensor_Enable(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_X_Sensor_Enable(DrvContextTypeDef *handle)
 {
   ACCELERO_Data_t *pData = (ACCELERO_Data_t *)handle->pData;
   LSM6DS0_X_Data_t *pComponentData = (LSM6DS0_X_Data_t *)pData->pComponentData;
@@ -371,7 +371,7 @@ static DrvStatusTypeDef LSM6DS0_X_Sensor_Enable(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Sensor_Disable(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_X_Sensor_Disable(DrvContextTypeDef *handle)
 {
   ACCELERO_Data_t *pData = (ACCELERO_Data_t *)handle->pData;
   LSM6DS0_X_Data_t *pComponentData = (LSM6DS0_X_Data_t *)pData->pComponentData;
@@ -407,7 +407,7 @@ static DrvStatusTypeDef LSM6DS0_X_Sensor_Disable(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i)
+DrvStatusTypeDef LSM6DS0_X_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i)
 {
 
   return LSM6DS0_Get_WhoAmI(handle, who_am_i);
@@ -420,7 +420,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t 
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Check_WhoAmI(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_X_Check_WhoAmI(DrvContextTypeDef *handle)
 {
 
   return LSM6DS0_Check_WhoAmI(handle);
@@ -434,7 +434,7 @@ static DrvStatusTypeDef LSM6DS0_X_Check_WhoAmI(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_Axes(DrvContextTypeDef *handle, SensorAxes_t *acceleration)
+DrvStatusTypeDef LSM6DS0_X_Get_Axes(DrvContextTypeDef *handle, SensorAxes_t *acceleration)
 {
 
   int16_t dataRaw[3];
@@ -469,7 +469,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_Axes(DrvContextTypeDef *handle, SensorAxes
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_AxesRaw(DrvContextTypeDef *handle, SensorAxesRaw_t *value)
+DrvStatusTypeDef LSM6DS0_X_Get_AxesRaw(DrvContextTypeDef *handle, SensorAxesRaw_t *value)
 {
 
   int16_t dataRaw[3];
@@ -497,7 +497,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_AxesRaw(DrvContextTypeDef *handle, SensorA
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_Sensitivity(DrvContextTypeDef *handle, float *sensitivity)
+DrvStatusTypeDef LSM6DS0_X_Get_Sensitivity(DrvContextTypeDef *handle, float *sensitivity)
 {
 
   LSM6DS0_ACC_GYRO_FS_XL_t fullScale;
@@ -540,7 +540,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_Sensitivity(DrvContextTypeDef *handle, flo
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_ODR(DrvContextTypeDef *handle, float *odr)
+DrvStatusTypeDef LSM6DS0_X_Get_ODR(DrvContextTypeDef *handle, float *odr)
 {
 
   LSM6DS0_ACC_GYRO_ODR_XL_t odr_low_level;
@@ -599,7 +599,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_ODR(DrvContextTypeDef *handle, float *odr)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t odr)
+DrvStatusTypeDef LSM6DS0_X_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t odr)
 {
 
   if (handle->isEnabled == 1)
@@ -629,7 +629,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value(DrvContextTypeDef *handle, float odr)
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value(DrvContextTypeDef *handle, float odr)
 {
 
   if (handle->isEnabled == 1)
@@ -659,7 +659,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value(DrvContextTypeDef *handle, float
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_FS(DrvContextTypeDef *handle, float *fullScale)
+DrvStatusTypeDef LSM6DS0_X_Get_FS(DrvContextTypeDef *handle, float *fullScale)
 {
 
   LSM6DS0_ACC_GYRO_FS_XL_t fs_low_level;
@@ -700,7 +700,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_FS(DrvContextTypeDef *handle, float *fullS
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_FS(DrvContextTypeDef *handle, SensorFs_t fullScale)
+DrvStatusTypeDef LSM6DS0_X_Set_FS(DrvContextTypeDef *handle, SensorFs_t fullScale)
 {
 
   LSM6DS0_ACC_GYRO_FS_XL_t new_fs;
@@ -737,7 +737,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_FS(DrvContextTypeDef *handle, SensorFs_t f
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_FS_Value(DrvContextTypeDef *handle, float fullScale)
+DrvStatusTypeDef LSM6DS0_X_Set_FS_Value(DrvContextTypeDef *handle, float fullScale)
 {
 
   LSM6DS0_ACC_GYRO_FS_XL_t new_fs;
@@ -764,7 +764,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_FS_Value(DrvContextTypeDef *handle, float 
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_Axes_Status(DrvContextTypeDef *handle, uint8_t *xyz_enabled)
+DrvStatusTypeDef LSM6DS0_X_Get_Axes_Status(DrvContextTypeDef *handle, uint8_t *xyz_enabled)
 {
 
   LSM6DS0_ACC_GYRO_XEN_XL_t xStatus;
@@ -800,7 +800,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_Axes_Status(DrvContextTypeDef *handle, uin
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_Axes_Status(DrvContextTypeDef *handle, uint8_t *enable_xyz)
+DrvStatusTypeDef LSM6DS0_X_Set_Axes_Status(DrvContextTypeDef *handle, uint8_t *enable_xyz)
 {
 
   if (LSM6DS0_ACC_GYRO_W_AccelerometerAxisX((void *)handle,
@@ -834,7 +834,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_Axes_Status(DrvContextTypeDef *handle, uin
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data)
+DrvStatusTypeDef LSM6DS0_X_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data)
 {
 
   if (LSM6DS0_Read_Reg(handle, reg, data) == COMPONENT_ERROR)
@@ -855,7 +855,7 @@ static DrvStatusTypeDef LSM6DS0_X_Read_Reg(DrvContextTypeDef *handle, uint8_t re
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data)
+DrvStatusTypeDef LSM6DS0_X_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data)
 {
 
   if (LSM6DS0_Write_Reg(handle, reg, data) == COMPONENT_ERROR)
@@ -875,7 +875,7 @@ static DrvStatusTypeDef LSM6DS0_X_Write_Reg(DrvContextTypeDef *handle, uint8_t r
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_DRDY_Status(DrvContextTypeDef *handle, uint8_t *status)
+DrvStatusTypeDef LSM6DS0_X_Get_DRDY_Status(DrvContextTypeDef *handle, uint8_t *status)
 {
 
   LSM6DS0_ACC_GYRO_XLDA_t status_raw;
@@ -908,7 +908,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_DRDY_Status(DrvContextTypeDef *handle, uin
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Init(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_G_Init(DrvContextTypeDef *handle)
 {
 
   uint8_t axes_status[] = { 1, 1, 1 };
@@ -967,7 +967,7 @@ static DrvStatusTypeDef LSM6DS0_G_Init(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_DeInit(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_G_DeInit(DrvContextTypeDef *handle)
 {
   GYRO_Data_t *pData = (GYRO_Data_t *)handle->pData;
   LSM6DS0_G_Data_t *pComponentData = (LSM6DS0_G_Data_t *)pData->pComponentData;
@@ -999,7 +999,7 @@ static DrvStatusTypeDef LSM6DS0_G_DeInit(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Sensor_Enable(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_G_Sensor_Enable(DrvContextTypeDef *handle)
 {
   GYRO_Data_t *pData = (GYRO_Data_t *)handle->pData;
   LSM6DS0_G_Data_t *pComponentData = (LSM6DS0_G_Data_t *)pData->pComponentData;
@@ -1030,7 +1030,7 @@ static DrvStatusTypeDef LSM6DS0_G_Sensor_Enable(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Sensor_Disable(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_G_Sensor_Disable(DrvContextTypeDef *handle)
 {
   GYRO_Data_t *pData = (GYRO_Data_t *)handle->pData;
   LSM6DS0_G_Data_t *pComponentData = (LSM6DS0_G_Data_t *)pData->pComponentData;
@@ -1068,7 +1068,7 @@ static DrvStatusTypeDef LSM6DS0_G_Sensor_Disable(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i)
+DrvStatusTypeDef LSM6DS0_G_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i)
 {
 
   return LSM6DS0_Get_WhoAmI(handle, who_am_i);
@@ -1080,7 +1080,7 @@ static DrvStatusTypeDef LSM6DS0_G_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t 
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Check_WhoAmI(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_G_Check_WhoAmI(DrvContextTypeDef *handle)
 {
 
   return LSM6DS0_Check_WhoAmI(handle);
@@ -1094,7 +1094,7 @@ static DrvStatusTypeDef LSM6DS0_G_Check_WhoAmI(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Get_Axes(DrvContextTypeDef *handle, SensorAxes_t *angular_velocity)
+DrvStatusTypeDef LSM6DS0_G_Get_Axes(DrvContextTypeDef *handle, SensorAxes_t *angular_velocity)
 {
 
   int16_t dataRaw[3];
@@ -1129,7 +1129,7 @@ static DrvStatusTypeDef LSM6DS0_G_Get_Axes(DrvContextTypeDef *handle, SensorAxes
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Get_AxesRaw(DrvContextTypeDef *handle, SensorAxesRaw_t *value)
+DrvStatusTypeDef LSM6DS0_G_Get_AxesRaw(DrvContextTypeDef *handle, SensorAxesRaw_t *value)
 {
 
   int16_t dataRaw[3];
@@ -1158,7 +1158,7 @@ static DrvStatusTypeDef LSM6DS0_G_Get_AxesRaw(DrvContextTypeDef *handle, SensorA
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Get_Sensitivity(DrvContextTypeDef *handle, float *sensitivity)
+DrvStatusTypeDef LSM6DS0_G_Get_Sensitivity(DrvContextTypeDef *handle, float *sensitivity)
 {
 
   LSM6DS0_ACC_GYRO_FS_G_t fullScale;
@@ -1198,7 +1198,7 @@ static DrvStatusTypeDef LSM6DS0_G_Get_Sensitivity(DrvContextTypeDef *handle, flo
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Get_ODR(DrvContextTypeDef *handle, float *odr)
+DrvStatusTypeDef LSM6DS0_G_Get_ODR(DrvContextTypeDef *handle, float *odr)
 {
 
   LSM6DS0_ACC_GYRO_ODR_G_t odr_low_level;
@@ -1248,7 +1248,7 @@ static DrvStatusTypeDef LSM6DS0_G_Get_ODR(DrvContextTypeDef *handle, float *odr)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t odr)
+DrvStatusTypeDef LSM6DS0_G_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t odr)
 {
 
   if (handle->isEnabled == 1)
@@ -1278,7 +1278,7 @@ static DrvStatusTypeDef LSM6DS0_G_Set_ODR(DrvContextTypeDef *handle, SensorOdr_t
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value(DrvContextTypeDef *handle, float odr)
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value(DrvContextTypeDef *handle, float odr)
 {
 
   if (handle->isEnabled == 1)
@@ -1308,7 +1308,7 @@ static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value(DrvContextTypeDef *handle, float
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Get_FS(DrvContextTypeDef *handle, float *fullScale)
+DrvStatusTypeDef LSM6DS0_G_Get_FS(DrvContextTypeDef *handle, float *fullScale)
 {
 
   LSM6DS0_ACC_GYRO_FS_G_t fs_low_level;
@@ -1346,7 +1346,7 @@ static DrvStatusTypeDef LSM6DS0_G_Get_FS(DrvContextTypeDef *handle, float *fullS
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Set_FS(DrvContextTypeDef *handle, SensorFs_t fullScale)
+DrvStatusTypeDef LSM6DS0_G_Set_FS(DrvContextTypeDef *handle, SensorFs_t fullScale)
 {
 
   LSM6DS0_ACC_GYRO_FS_G_t new_fs;
@@ -1383,7 +1383,7 @@ static DrvStatusTypeDef LSM6DS0_G_Set_FS(DrvContextTypeDef *handle, SensorFs_t f
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Set_FS_Value(DrvContextTypeDef *handle, float fullScale)
+DrvStatusTypeDef LSM6DS0_G_Set_FS_Value(DrvContextTypeDef *handle, float fullScale)
 {
 
   LSM6DS0_ACC_GYRO_FS_G_t new_fs;
@@ -1409,7 +1409,7 @@ static DrvStatusTypeDef LSM6DS0_G_Set_FS_Value(DrvContextTypeDef *handle, float 
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Get_Axes_Status(DrvContextTypeDef *handle, uint8_t *xyz_enabled)
+DrvStatusTypeDef LSM6DS0_G_Get_Axes_Status(DrvContextTypeDef *handle, uint8_t *xyz_enabled)
 {
 
   LSM6DS0_ACC_GYRO_XEN_G_t xStatus;
@@ -1445,7 +1445,7 @@ static DrvStatusTypeDef LSM6DS0_G_Get_Axes_Status(DrvContextTypeDef *handle, uin
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Set_Axes_Status(DrvContextTypeDef *handle, uint8_t *enable_xyz)
+DrvStatusTypeDef LSM6DS0_G_Set_Axes_Status(DrvContextTypeDef *handle, uint8_t *enable_xyz)
 {
 
   if (LSM6DS0_ACC_GYRO_W_GyroAxisX((void *)handle,
@@ -1479,7 +1479,7 @@ static DrvStatusTypeDef LSM6DS0_G_Set_Axes_Status(DrvContextTypeDef *handle, uin
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data)
+DrvStatusTypeDef LSM6DS0_G_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data)
 {
 
   if (LSM6DS0_Read_Reg(handle, reg, data) == COMPONENT_ERROR)
@@ -1500,7 +1500,7 @@ static DrvStatusTypeDef LSM6DS0_G_Read_Reg(DrvContextTypeDef *handle, uint8_t re
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data)
+DrvStatusTypeDef LSM6DS0_G_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data)
 {
 
   if (LSM6DS0_Write_Reg(handle, reg, data) == COMPONENT_ERROR)
@@ -1520,7 +1520,7 @@ static DrvStatusTypeDef LSM6DS0_G_Write_Reg(DrvContextTypeDef *handle, uint8_t r
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Get_DRDY_Status(DrvContextTypeDef *handle, uint8_t *status)
+DrvStatusTypeDef LSM6DS0_G_Get_DRDY_Status(DrvContextTypeDef *handle, uint8_t *status)
 {
 
   LSM6DS0_ACC_GYRO_GDA_t status_raw;
@@ -1560,7 +1560,7 @@ static DrvStatusTypeDef LSM6DS0_G_Get_DRDY_Status(DrvContextTypeDef *handle, uin
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i)
+DrvStatusTypeDef LSM6DS0_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *who_am_i)
 {
 
   /* Read WHO AM I register */
@@ -1580,7 +1580,7 @@ static DrvStatusTypeDef LSM6DS0_Get_WhoAmI(DrvContextTypeDef *handle, uint8_t *w
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_Check_WhoAmI(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_Check_WhoAmI(DrvContextTypeDef *handle)
 {
 
   uint8_t who_am_i = 0x00;
@@ -1605,7 +1605,7 @@ static DrvStatusTypeDef LSM6DS0_Check_WhoAmI(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data)
+DrvStatusTypeDef LSM6DS0_Read_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t *data)
 {
 
   if (LSM6DS0_ACC_GYRO_ReadReg((void *)handle, reg, data, 1) == MEMS_ERROR)
@@ -1624,7 +1624,7 @@ static DrvStatusTypeDef LSM6DS0_Read_Reg(DrvContextTypeDef *handle, uint8_t reg,
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data)
+DrvStatusTypeDef LSM6DS0_Write_Reg(DrvContextTypeDef *handle, uint8_t reg, uint8_t data)
 {
 
   if (LSM6DS0_ACC_GYRO_WriteReg((void *)handle, reg, &data, 1) == MEMS_ERROR)
@@ -1642,7 +1642,7 @@ static DrvStatusTypeDef LSM6DS0_Write_Reg(DrvContextTypeDef *handle, uint8_t reg
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_Axes_Raw(DrvContextTypeDef *handle, int16_t *pData)
+DrvStatusTypeDef LSM6DS0_X_Get_Axes_Raw(DrvContextTypeDef *handle, int16_t *pData)
 {
 
   uint8_t regValue[6] = {0, 0, 0, 0, 0, 0};
@@ -1669,7 +1669,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_Axes_Raw(DrvContextTypeDef *handle, int16_
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Enabled(DrvContextTypeDef *handle, SensorOdr_t odr)
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Enabled(DrvContextTypeDef *handle, SensorOdr_t odr)
 {
 
   LSM6DS0_ACC_GYRO_ODR_XL_t new_odr;
@@ -1711,7 +1711,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Enabled(DrvContextTypeDef *handle
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Disabled(DrvContextTypeDef *handle, SensorOdr_t odr)
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Disabled(DrvContextTypeDef *handle, SensorOdr_t odr)
 {
 
   ACCELERO_Data_t *pData = (ACCELERO_Data_t *)handle->pData;
@@ -1749,7 +1749,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_ODR_When_Disabled(DrvContextTypeDef *handl
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Enabled(DrvContextTypeDef *handle, float odr)
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Enabled(DrvContextTypeDef *handle, float odr)
 {
 
   LSM6DS0_ACC_GYRO_ODR_XL_t new_odr;
@@ -1776,7 +1776,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Enabled(DrvContextTypeDef *
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Disabled(DrvContextTypeDef *handle, float odr)
+DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Disabled(DrvContextTypeDef *handle, float odr)
 {
 
   ACCELERO_Data_t *pData = (ACCELERO_Data_t *)handle->pData;
@@ -1800,7 +1800,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_ODR_Value_When_Disabled(DrvContextTypeDef 
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Get_Axes_Raw(DrvContextTypeDef *handle, int16_t *pData)
+DrvStatusTypeDef LSM6DS0_G_Get_Axes_Raw(DrvContextTypeDef *handle, int16_t *pData)
 {
 
   uint8_t regValue[6] = {0, 0, 0, 0, 0, 0};
@@ -1826,7 +1826,7 @@ static DrvStatusTypeDef LSM6DS0_G_Get_Axes_Raw(DrvContextTypeDef *handle, int16_
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Enabled(DrvContextTypeDef *handle, SensorOdr_t odr)
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Enabled(DrvContextTypeDef *handle, SensorOdr_t odr)
 {
 
   LSM6DS0_ACC_GYRO_ODR_G_t new_odr;
@@ -1875,7 +1875,7 @@ static DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Enabled(DrvContextTypeDef *handle
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Disabled(DrvContextTypeDef *handle, SensorOdr_t odr)
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Disabled(DrvContextTypeDef *handle, SensorOdr_t odr)
 {
 
   GYRO_Data_t *pData = (GYRO_Data_t *)handle->pData;
@@ -1918,7 +1918,7 @@ static DrvStatusTypeDef LSM6DS0_G_Set_ODR_When_Disabled(DrvContextTypeDef *handl
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Enabled(DrvContextTypeDef *handle, float odr)
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Enabled(DrvContextTypeDef *handle, float odr)
 {
 
   LSM6DS0_ACC_GYRO_ODR_G_t new_odr;
@@ -1952,7 +1952,7 @@ static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Enabled(DrvContextTypeDef *
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Disabled(DrvContextTypeDef *handle, float odr)
+DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Disabled(DrvContextTypeDef *handle, float odr)
 {
 
   GYRO_Data_t *pData = (GYRO_Data_t *)handle->pData;
@@ -1990,7 +1990,7 @@ static DrvStatusTypeDef LSM6DS0_G_Set_ODR_Value_When_Disabled(DrvContextTypeDef 
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_AxesSuperRaw(DrvContextTypeDef *handle, int16_t *pData, ACTIVE_AXIS_t axl_axis)
+DrvStatusTypeDef LSM6DS0_X_Get_AxesSuperRaw(DrvContextTypeDef *handle, int16_t *pData, ACTIVE_AXIS_t axl_axis)
 {
   uint8_t regValue[2] = {0, 0};
 
@@ -2031,7 +2031,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_AxesSuperRaw(DrvContextTypeDef *handle, in
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Get_Active_Axis(DrvContextTypeDef *handle, ACTIVE_AXIS_t *axl_axis)
+DrvStatusTypeDef LSM6DS0_X_Get_Active_Axis(DrvContextTypeDef *handle, ACTIVE_AXIS_t *axl_axis)
 {
   uint8_t regVal;
 
@@ -2070,7 +2070,7 @@ static DrvStatusTypeDef LSM6DS0_X_Get_Active_Axis(DrvContextTypeDef *handle, ACT
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_Active_Axis(DrvContextTypeDef *handle, ACTIVE_AXIS_t axl_axis)
+DrvStatusTypeDef LSM6DS0_X_Set_Active_Axis(DrvContextTypeDef *handle, ACTIVE_AXIS_t axl_axis)
 {
   uint8_t regVal;
 
@@ -2116,7 +2116,7 @@ static DrvStatusTypeDef LSM6DS0_X_Set_Active_Axis(DrvContextTypeDef *handle, ACT
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Enable_HP_Filter(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_X_Enable_HP_Filter(DrvContextTypeDef *handle)
 {
   if (LSM6DS0_ACC_GYRO_W_AccelerometerCutOff_filter((void *)handle, LSM6DS0_ACC_GYRO_DCF_ODR_DIV_100) == MEMS_ERROR)
   {
@@ -2139,7 +2139,7 @@ static DrvStatusTypeDef LSM6DS0_X_Enable_HP_Filter(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Disable_HP_Filter(DrvContextTypeDef *handle)
+DrvStatusTypeDef LSM6DS0_X_Disable_HP_Filter(DrvContextTypeDef *handle)
 {
 
   if (LSM6DS0_ACC_GYRO_W_AccelerometerFilteredDataSelection((void *)handle,
@@ -2158,7 +2158,7 @@ static DrvStatusTypeDef LSM6DS0_X_Disable_HP_Filter(DrvContextTypeDef *handle)
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_ClearDRDY(DrvContextTypeDef *handle, ACTIVE_AXIS_t axl_axis)
+DrvStatusTypeDef LSM6DS0_X_ClearDRDY(DrvContextTypeDef *handle, ACTIVE_AXIS_t axl_axis)
 {
   uint8_t regValue[6];
 
@@ -2203,7 +2203,7 @@ static DrvStatusTypeDef LSM6DS0_X_ClearDRDY(DrvContextTypeDef *handle, ACTIVE_AX
  * @retval COMPONENT_OK in case of success
  * @retval COMPONENT_ERROR in case of failure
  */
-static DrvStatusTypeDef LSM6DS0_X_Set_INT1_DRDY(DrvContextTypeDef *handle, INT1_DRDY_CONFIG_t axl_drdyStatus)
+DrvStatusTypeDef LSM6DS0_X_Set_INT1_DRDY(DrvContextTypeDef *handle, INT1_DRDY_CONFIG_t axl_drdyStatus)
 {
   LSM6DS0_ACC_GYRO_DRDY_MASK_BIT_t drdyStatus;
   LSM6DS0_ACC_GYRO_INT_DRDY_XL_t drdyStatus1;

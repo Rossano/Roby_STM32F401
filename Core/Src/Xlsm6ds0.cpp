@@ -5,11 +5,14 @@
   *  Author: Ross
   */
 
-#include "stm32f4xx_hal.h"
-#include <LSM6DS0_ACC_GYRO_driver_HL.h>
+//#include "stm32f4xx_hal.h"
+//#include <LSM6DS0_ACC_GYRO_driver_HL.h>
+//#include <board.h>
 #include <Xlsm6ds0.h>
 
 extern ACCELERO_Data_t ACCELERO_Data;
+extern uint8_t AccGyro_Sensor_IO_IT_Config(void);
+//extern uint8_t I2C_EXPBD_Init(void);
 
 X_lsm6ds0::X_lsm6ds0(DrvContextTypeDef &ctx):
 	Accelerometer(ctx){
@@ -74,8 +77,8 @@ X_lsm6ds0::~X_lsm6ds0() {
 
 DrvStatusTypeDef X_lsm6ds0::Init (DrvContextTypeDef &ctx)
 {
-	DrvContextTypeDef *foo;
-	foo = &ctx;
+	//DrvContextTypeDef *foo;
+	//foo = &ctx;
 	//return LSM6DS0_X_Init(foo);
 	return LSM6DS0_X_Init(&ctx);
 }
@@ -200,7 +203,7 @@ DrvStatusTypeDef X_lsm6ds0::LSM6DS0_Sensor_IO_ITConfig(void)
 //  HAL_NVIC_EnableIRQ(LSM6DS0_INT1_EXTI_IRQn);
 //
 //  return COMPONENT_OK;
-	if(AccGyro_Sensor_IO_ITConfig())
+	if(AccGyro_Sensor_IO_IT_Config())
 	{
 		return COMPONENT_OK;
 	}
@@ -218,7 +221,7 @@ DrvStatusTypeDef X_lsm6ds0::LSM6DS0_Sensor_IO_ITConfig(void)
 DrvStatusTypeDef X_lsm6ds0::Sensor_IO_Init(void)
 {
 
-  if (I2C_EXPBD_Init())
+  if ((uint8_t)I2C_EXPBD_Init())
   {
     return COMPONENT_ERROR;
   }

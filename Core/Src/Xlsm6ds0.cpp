@@ -26,6 +26,8 @@ X_lsm6ds0::X_lsm6ds0(DrvContextTypeDef &ctx):
 		  while(1);
 	  }
 
+	  LSM6DS0_Sensor_IO_ITConfig();
+
 //	  /* Setup sensor handle. */
 //	  ctx.who_am_i 		= LSM6DS0_ACC_GYRO_WHO_AM_I;
 //	  ctx.ifType 		= 0; /* I2C interface */
@@ -62,7 +64,7 @@ X_lsm6ds0::X_lsm6ds0(DrvContextTypeDef &ctx):
 
 	  if(this->Init(ctx) == COMPONENT_ERROR)
 	  {
-		  while (1);
+//		  while (1);
 	  }
 
 	  /* Configure interrupt lines for LSM6DS0 */

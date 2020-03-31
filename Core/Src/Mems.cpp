@@ -5,14 +5,15 @@
  *      Author: Ross
  */
 
-#include <LSM6DS0_ACC_GYRO_driver.h>
-#include <LSM6DS0_ACC_GYRO_driver_HL.h>
 #include <board.h>
 #include <sensor.h>
 #include <Mems.h>
-#include <stm32f4xx_hal_def.h>
-#include <stm32f4xx_hal_i2c.h>
-#include <sys/_stdint.h>
+#include <LSM6DS0_ACC_GYRO_driver.h>
+#include <LSM6DS0_ACC_GYRO_driver_HL.h>
+
+//#include <stm32f4xx_hal_def.h>
+//#include <stm32f4xx_hal_i2c.h>
+//#include <sys/_stdint.h>
 
 extern ACCELERO_Data_t ACCELERO_Data;
 extern GYRO_Data_t GYRO_Data;
@@ -26,7 +27,7 @@ Mems::Mems()
 	/* Setup sensor handle. */
 	xctx.who_am_i 		= LSM6DS0_ACC_GYRO_WHO_AM_I;
 	xctx.ifType 		= 0; /* I2C interface */
-	xctx.address 		= LSM6DS0_ACC_GYRO_I2C_ADDRESS_HIGH;
+	xctx.address 		= LSM6DS0_ACC_GYRO_I2C_ADDRESS_LOW; //HIGH;
 	xctx.instance 		= LSM6DS0_X_0;
 	xctx.isInitialized = 0;
 	xctx.isEnabled     = 0;
@@ -42,7 +43,7 @@ Mems::Mems()
 	/* Setup sensor handle. */
 	gctx.who_am_i 		= LSM6DS0_ACC_GYRO_WHO_AM_I;
 	gctx.ifType 		= 0; /* I2C interface */
-	gctx.address 		= LSM6DS0_ACC_GYRO_I2C_ADDRESS_HIGH;
+	gctx.address 		= LSM6DS0_ACC_GYRO_I2C_ADDRESS_LOW; //HIGH;
 	gctx.instance 		= LSM6DS0_G_0;
 	gctx.isInitialized = 0;
 	gctx.isEnabled     = 0;
@@ -67,9 +68,20 @@ DrvStatusTypeDef Mems::Initialize_Sensors()
 {
 	DrvContextTypeDef Xfoo;
 	DrvContextTypeDef Gfoo;
-	if( this->accel->Init(Xfoo) == COMPONENT_OK)
+
+	if(accel == NULL || gyro == NULL) return COMPONENT_ERROR;
+
+	//accel->ctx->isInitialized = 1;
+	//gyro->ctx->isInitialized = 1;
+
+	//Xfoo = *accel->ctx;
+	//Gfoo = *gyro->ctx;
+
+	//if( this->accel->Init(Xfoo) == COMPONENT_OK)
+	if( this->accel->Init(*accel->ctx) == COMPONENT_OK)
 	{
-		return this->gyro->Init(Gfoo);
+		//return this->gyro->Init(Gfoo);
+		return this->gyro->Init(*gyro->ctx);
 	}
 	else return COMPONENT_ERROR;
 }
@@ -90,10 +102,59 @@ DrvStatusTypeDef Mems::Disable_Sensors()
 	return COMPONENT_NOT_IMPLEMENTED;
 }
 
-SensorAxes_t Mems::ReadAccelero() {
+SensorAxes_t Mems::ReadAccelero()
+{
+	uint8_t id;
+	SensorAxes_t acceleration;
+	uint8_t status;
+
+	//	  BSP_ACCELERO_Get_Instance(handle, &id);
+
+	//	  BSP_ACCELERO_IsInitialized(handle, &status);
+
+	if (true) //this->IsAcceleroInitialized())// status == 1)
+	{
+		if (this->accel->Get_Axes(xctx, acceleration) == COMPONENT_ERROR) //BSP_ACCELERO_Get_Axes(handle, &acceleration) == COMPONENT_ERROR)
+		{
+			acceleration.AXIS_X = 0;
+			acceleration.AXIS_Y = 0;
+			acceleration.AXIS_Z = 0;
+		}
+	}
+	return acceleration;
 }
 
-SensorAxes_t Mems::ReadGyro() {
+SensorAxes_t Mems::ReadGyro()
+{
+	//uint8_t id;
+	SensorAxes_t angular_velocity;
+	//uint8_t status;
+
+
+	//BSP_GYRO_Get_Instance(handle, &id);
+
+	//BSP_GYRO_IsInitialized(handle, &status);
+
+	if (this->IsGyroInitialized()) //status == 1)
+	{
+		if (this->gyro->Get_Axes(gctx, angular_velocity) == COMPONENT_ERROR)//BSP_GYRO_Get_Axes(handle, &angular_velocity) == COMPONENT_ERROR)
+		{
+			angular_velocity.AXIS_X = 0;
+			angular_velocity.AXIS_Y = 0;
+			angular_velocity.AXIS_Z = 0;
+		}
+	}
+	return angular_velocity;
+}
+
+bool Mems::IsAcceleroInitialized()
+{
+	return (bool)this->accel->ctx->isInitialized;
+}
+
+bool Mems::IsGyroInitialized()
+{
+	return (bool)this->gyro->ctx->isInitialized;
 }
 
 //
@@ -306,62 +367,62 @@ void Mems::I2C_EXPBD_Error(uint8_t Addr)
 	I2C_EXPBD_Init();
 }
 
-/**
- * @brief  Read a register of the device through BUS
- * @param  Addr Device address on BUS
- * @param  Reg The target register address to read
- * @param  pBuffer The data to be read
- * @param  Size Number of bytes to be read
- * @retval 0 in case of success
- * @retval 1 in case of failure
- */
-uint8_t Mems::I2C_EXPBD_ReadData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer,
-		uint16_t Size)
-{
-	HAL_StatusTypeDef status = HAL_OK;
-
-	status = HAL_I2C_Mem_Read(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size, I2C_EXPBD_Timeout);
-
-	/* Check the communication status */
-	if (status != HAL_OK)
-	{
-
-		/* Execute user timeout callback */
-		I2C_EXPBD_Error(Addr);
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-/**
- * @brief  Write data to the register of the device through BUS
- * @param  Addr Device address on BUS
- * @param  Reg The target register address to be written
- * @param  pBuffer The data to be written
- * @param  Size Number of bytes to be written
- * @retval 0 in case of success
- * @retval 1 in case of failure
- */
-uint8_t Mems::I2C_EXPBD_WriteData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer,
-		uint16_t Size)
-{
-	HAL_StatusTypeDef status = HAL_OK;
-
-	status = HAL_I2C_Mem_Write(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size, I2C_EXPBD_Timeout);
-
-	/* Check the communication status */
-	if (status != HAL_OK)
-	{
-
-		/* Execute user timeout callback */
-		I2C_EXPBD_Error(Addr);
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
+///**
+// * @brief  Read a register of the device through BUS
+// * @param  Addr Device address on BUS
+// * @param  Reg The target register address to read
+// * @param  pBuffer The data to be read
+// * @param  Size Number of bytes to be read
+// * @retval 0 in case of success
+// * @retval 1 in case of failure
+// */
+//uint8_t Mems::I2C_EXPBD_ReadData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer,
+//		uint16_t Size)
+//{
+//	HAL_StatusTypeDef status = HAL_OK;
+//
+//	status = HAL_I2C_Mem_Read(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size, I2C_EXPBD_Timeout);
+//
+//	/* Check the communication status */
+//	if (status != HAL_OK)
+//	{
+//
+//		/* Execute user timeout callback */
+//		I2C_EXPBD_Error(Addr);
+//		return 1;
+//	}
+//	else
+//	{
+//		return 0;
+//	}
+//}
+//
+///**
+// * @brief  Write data to the register of the device through BUS
+// * @param  Addr Device address on BUS
+// * @param  Reg The target register address to be written
+// * @param  pBuffer The data to be written
+// * @param  Size Number of bytes to be written
+// * @retval 0 in case of success
+// * @retval 1 in case of failure
+// */
+//uint8_t Mems::I2C_EXPBD_WriteData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer,
+//		uint16_t Size)
+//{
+//	HAL_StatusTypeDef status = HAL_OK;
+//
+//	status = HAL_I2C_Mem_Write(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size, I2C_EXPBD_Timeout);
+//
+//	/* Check the communication status */
+//	if (status != HAL_OK)
+//	{
+//
+//		/* Execute user timeout callback */
+//		I2C_EXPBD_Error(Addr);
+//		return 1;
+//	}
+//	else
+//	{
+//		return 0;
+//	}
+//}

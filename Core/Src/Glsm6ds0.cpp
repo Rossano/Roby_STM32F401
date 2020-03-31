@@ -18,7 +18,7 @@ G_lsm6ds0::G_lsm6ds0(DrvContextTypeDef &ctx):
 	if (Sensor_IO_Init() == COMPONENT_ERROR)
 	{
 		//return COMPONENT_ERROR;
-		while(1);
+//		while(1);
 	}
 
 //	/* Setup sensor handle. */
@@ -39,7 +39,7 @@ G_lsm6ds0::G_lsm6ds0(DrvContextTypeDef &ctx):
 
 	if(this->Init(ctx) == COMPONENT_ERROR)
 	{
-		while (1);
+//		while (1);
 	}
 }
 

@@ -13,7 +13,8 @@ extern "C" {
 #endif
 
 #include "stm32f4xx_hal.h"
-#include "main.h"
+
+//#include "main.h"
 
 #include <sensor.h>
 
@@ -182,13 +183,15 @@ extern "C" {
 
 extern I2C_HandleTypeDef	hi2c1;
 #define I2C_EXPBD_Handle	hi2c1
+extern UART_HandleTypeDef	huart2;
+#define UartHandle			huart2
 
 #define NUCLEO_I2C_EXPBD_EV_IRQn                    I2C1_EV_IRQn
 #define NUCLEO_I2C_EXPBD_ER_IRQn                    I2C1_ER_IRQn
 
 extern uint32_t I2C_EXPBD_Timeout;
 
-extern I2C_HandleTypeDef I2C_EXPBD_Handle;
+//extern I2C_HandleTypeDef I2C_EXPBD_Handle;
 
 /**
  * @brief I2C MSP Initialization

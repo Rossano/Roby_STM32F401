@@ -8,8 +8,8 @@
 #ifndef SRC_MEMS_H_
 #define SRC_MEMS_H_
 
-#include <stdint.h>
-#include <board.h>
+//#include <stdint.h>
+//#include <board.h>
 #include <Xlsm6ds0.h>
 #include <Glsm6ds0.h>
 
@@ -83,6 +83,8 @@ public:
 	DrvStatusTypeDef Disable_Sensors();
 	SensorAxes_t ReadAccelero();
 	SensorAxes_t ReadGyro();
+	bool IsAcceleroInitialized();
+	bool IsGyroInitialized();
 
 //	DrvStatusTypeDef Sensor_IO_Init(void);
 //	DrvStatusTypeDef LSM6DS0_Sensor_IO_ITConfig(void);
@@ -96,8 +98,8 @@ private:
 //	uint8_t I2C_EXPBD_Init(void);
 //	void I2C_EXPBD_MspInit(void);
 	void I2C_EXPBD_Error(uint8_t Addr);
-	uint8_t I2C_EXPBD_ReadData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer, uint16_t Size);
-	uint8_t I2C_EXPBD_WriteData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer, uint16_t Size);
+//	uint8_t I2C_EXPBD_ReadData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer, uint16_t Size);
+//	uint8_t I2C_EXPBD_WriteData(uint8_t Addr, uint8_t Reg, uint8_t *pBuffer, uint16_t Size);
 };
 
 #endif /* SRC_MEMS_H_ */

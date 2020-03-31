@@ -23,12 +23,18 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <board.h>
 #include <Mems.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+#define MAX_BUF_SIZE		128
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -49,6 +55,13 @@ Mems *mems;
 
 /* USER CODE BEGIN PV */
 
+typedef struct displayFloatToInt_s
+{
+  int8_t sign; /* 0 means positive, 1 means negative */
+  uint32_t out_int;
+  uint32_t out_dec;
+} displayFloatToInt_t;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,10 +71,18 @@ static void MX_USART2_UART_Init(void);
 static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
 
+void print_accelero(SensorAxes_t &, bool);
+void print_gyro(SensorAxes_t &, bool);
+void FloatToInt(float in, displayFloatToInt_t *out_value, int32_t dec_prec);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+SensorAxes_t  acc, gyro;
+static char dataOut[MAX_BUF_SIZE];        /*!< DataOut Frame */
+SensorAxes_t accRead, gyroRead;
 
 /* USER CODE END 0 */
 
@@ -100,6 +121,9 @@ int main(void)
 
   mems = new Mems();
 
+  mems->Initialize_Sensors();
+  mems->Enalble_Sensors();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,6 +131,14 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+
+	  accRead = mems->ReadAccelero();
+	  gyroRead = mems->ReadGyro();
+
+	  print_accelero(accRead, false);
+	  print_gyro(gyroRead, false);
+
+	  HAL_Delay(1000);
 
     /* USER CODE BEGIN 3 */
   }
@@ -172,7 +204,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.ClockSpeed = 400000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -263,6 +295,142 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void print_accelero(SensorAxes_t &acceleration, bool verbose)
+{
+	uint8_t who_am_i;
+	float odr;
+	float fullScale;
+
+	snprintf(dataOut, MAX_BUF_SIZE, "\r\nACC_X: %d, ACC_Y: %d, ACC_Z: %d\r\n",
+			(int)acceleration.AXIS_X, (int)acceleration.AXIS_Y, (int)acceleration.AXIS_Z);
+
+	HAL_UART_Transmit(&UartHandle, (uint8_t *)dataOut, strlen(dataOut), 5000);
+
+	if (verbose == 1)
+	{
+		if (mems->accel->Get_WhoAmI(*mems->accel->ctx, who_am_i) == COMPONENT_ERROR) //BSP_ACCELERO_Get_WhoAmI(handle, &who_am_i) == COMPONENT_ERROR)
+		{
+			snprintf(dataOut, MAX_BUF_SIZE, "WHO AM I : ERROR\r\n");
+		}
+		else
+		{
+			snprintf(dataOut, MAX_BUF_SIZE, "WHO AM I address: 0x%02X\r\n", who_am_i);
+		}
+
+		HAL_UART_Transmit(&UartHandle, (uint8_t *)dataOut, strlen(dataOut), 5000);
+
+		if (mems->accel->Get_ODR(*mems->accel->ctx, odr) == COMPONENT_ERROR)
+		{
+			snprintf(dataOut, MAX_BUF_SIZE, "ODR: ERROR\r\n");
+		}
+		else
+		{
+			displayFloatToInt_t out_value;
+			FloatToInt(odr, &out_value, 3);
+			snprintf(dataOut, MAX_BUF_SIZE, "ODR: %c%d.%03d Hz\r\n", ((out_value.sign) ? '-' : '+'),
+					(int)out_value.out_int, (int)out_value.out_dec);
+		}
+
+		HAL_UART_Transmit(&UartHandle, (uint8_t *)dataOut, strlen(dataOut), 5000);
+
+		if (mems->accel->Get_FS(*mems->accel->ctx, fullScale) == COMPONENT_ERROR)
+		{
+			snprintf(dataOut, MAX_BUF_SIZE, "FS: ERROR\r\n");
+		}
+		else
+		{
+			displayFloatToInt_t out_value;
+			FloatToInt(fullScale, &out_value, 3);
+			snprintf(dataOut, MAX_BUF_SIZE, "FS: %c%d.%03d g\r\n", ((out_value.sign) ? '-' : '+'),
+					(int)out_value.out_int, (int)out_value.out_dec);
+		}
+
+		HAL_UART_Transmit(&UartHandle, (uint8_t *)dataOut, strlen(dataOut), 5000);
+	}
+}
+
+void print_gyro(SensorAxes_t &gyro, bool verbose)
+{
+	uint8_t who_am_i;
+	float odr;
+	float fullScale;
+	SensorAxes_t angular_velocity;
+
+	uint8_t status;
+
+
+	snprintf(dataOut, MAX_BUF_SIZE, "\r\nGYR_X: %d, GYR_Y: %d, GYR_Z: %d\r\n",
+			(int)angular_velocity.AXIS_X, (int)angular_velocity.AXIS_Y, (int)angular_velocity.AXIS_Z);
+
+	HAL_UART_Transmit(&UartHandle, (uint8_t *)dataOut, strlen(dataOut), 5000);
+
+	if (verbose == 1)
+	{
+		if (mems->gyro->Get_WhoAmI(*mems->gyro->ctx, who_am_i) == COMPONENT_ERROR)//BSP_GYRO_Get_WhoAmI(handle, &who_am_i) == COMPONENT_ERROR)
+		{
+			snprintf(dataOut, MAX_BUF_SIZE, "WHO AM I address: ERROR\r\n");
+		}
+		else
+		{
+			snprintf(dataOut, MAX_BUF_SIZE, "WHO AM I address: 0x%02X\r\n", who_am_i);
+		}
+
+		HAL_UART_Transmit(&UartHandle, (uint8_t *)dataOut, strlen(dataOut), 5000);
+
+		if (mems->gyro->Get_ODR(*mems->gyro->ctx, odr) == COMPONENT_ERROR)//BSP_GYRO_Get_ODR(handle, &odr) == COMPONENT_ERROR)
+		{
+			snprintf(dataOut, MAX_BUF_SIZE, "ODR: ERROR\r\n");
+		}
+		else
+		{
+			displayFloatToInt_t out_value;
+			FloatToInt(odr, &out_value, 3);
+			snprintf(dataOut, MAX_BUF_SIZE, "ODR: %c%d.%03d Hz\r\n", ((out_value.sign) ? '-' : '+'),
+					(int)out_value.out_int, (int)out_value.out_dec);
+		}
+
+		HAL_UART_Transmit(&UartHandle, (uint8_t *)dataOut, strlen(dataOut), 5000);
+
+		if (mems->gyro->Get_FS(*mems->gyro->ctx, fullScale) == COMPONENT_ERROR) //BSP_GYRO_Get_FS(handle, &fullScale) == COMPONENT_ERROR)
+		{
+			snprintf(dataOut, MAX_BUF_SIZE, "FS: ERROR\r\n");
+		}
+		else
+		{
+			displayFloatToInt_t out_value;
+			FloatToInt(fullScale, &out_value, 3);
+			snprintf(dataOut, MAX_BUF_SIZE, "FS: %c%d.%03d g\r\n", ((out_value.sign) ? '-' : '+'),
+					(int)out_value.out_int, (int)out_value.out_dec);
+		}
+
+		HAL_UART_Transmit(&UartHandle, (uint8_t *)dataOut, strlen(dataOut), 5000);
+	}
+}
+
+/**
+ * @brief  Splits a float into two integer values.
+ * @param  in the float value as input
+ * @param  out_value the pointer to the sign, integer and decimal parts as output
+ * @param  dec_prec the decimal precision to be used
+ * @retval None
+ */
+void FloatToInt(float in, displayFloatToInt_t *out_value, int32_t dec_prec)
+{
+  if (in >= 0.0f)
+  {
+    out_value->sign = 0;
+  }
+  else
+  {
+    out_value->sign = 1;
+    in = -in;
+  }
+
+  out_value->out_int = (int32_t)in;
+  in = in - (float)(out_value->out_int);
+  out_value->out_dec = (int32_t)trunc(in * pow(10, dec_prec));
+}
 
 /* USER CODE END 4 */
 

@@ -6,7 +6,7 @@
  */
 
 #include <board.h>
-#include <sensor.h>
+//#include <sensor.h>
 
 uint32_t I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;    /*<! Value of Timeout when I2C communication fails */
 /**
